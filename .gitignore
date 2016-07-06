@@ -1,15 +1,40 @@
-# Ignore Play! working directory #
-bin/
-/db
+Thumbs.db
+.tmp*
+tmp
+.target
+*.class
+*.log
+out
+bin
+
+# sbt specific
+.cache*
+.history
+.lib
+dist
+target
+lib_managed
+src_managed
+project/boot
+project/plugins/project
+
+# Play! Framework specific
+RUNNING_PID
+
+# Scala-IDE specific
+.scala_dependencies
+.worksheet
+
+# Eclipse specific
+.classpath
+.settings
+.project
 .eclipse
-/lib/
-/logs/
-/modules
-/project/target
-/target
-tmp/
-test-result
-server.pid
-*.eml
-/dist/
-.cache
+
+# IntelliJ specific
+.idea
+*.iml
+.idea_modules
+
+# Mac specific
+.DS_Store*
