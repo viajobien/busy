@@ -27,7 +27,7 @@ ScalariformKeys.preferences := {
     .setPreference(SpacesAroundMultiImports, true)
 }
 
-coverageMinimum := 65
+coverageMinimum := 70
 coverageFailOnMinimum := true
 coverageHighlighting := false
 coverageExcludedPackages := "<empty>;Reverse.*;views.*;mongo.*;global.*;router.*"
