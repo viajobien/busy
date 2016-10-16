@@ -2,10 +2,10 @@
 
 ## Some useful links
 
-http://www.scala-sbt.org/release/docs/Using-Sonatype.html
-http://www.scala-sbt.org/sbt-pgp/usage.html
-https://github.com/xerial/sbt-sonatype
-https://issues.sonatype.org/browse/OSSRH-25611
+http://www.scala-sbt.org/release/docs/Using-Sonatype.html  
+http://www.scala-sbt.org/sbt-pgp/usage.html  
+https://github.com/xerial/sbt-sonatype  
+https://issues.sonatype.org/browse/OSSRH-25611  
 
 ## Generate GPG key
 
