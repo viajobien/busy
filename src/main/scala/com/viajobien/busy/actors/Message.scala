@@ -3,7 +3,7 @@ package com.viajobien.busy.actors
 import scala.concurrent.duration.FiniteDuration
 
 /**
- * Created by david on 29/06/16.
+ * @author david on 29/06/16.
  */
 trait Message
 

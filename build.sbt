@@ -1,5 +1,6 @@
 import com.typesafe.sbt.SbtScalariform.ScalariformKeys
-import scalariform.formatter.preferences.{AlignSingleLineCaseStatements, BooleanPreferenceDescriptor, DoubleIndentClassDeclaration, SpacesAroundMultiImports}
+
+import scalariform.formatter.preferences._
 
 name := "busy"
 organization := "com.viajobien"
@@ -12,20 +13,11 @@ lazy val compileScalastyle = taskKey[Unit]("compileScalastyle")
 compileScalastyle := org.scalastyle.sbt.ScalastylePlugin.scalastyle.in(Compile).toTask("").value
 compileScalastyle <<= compileScalastyle triggeredBy (compile in Compile)
 
-ScalariformKeys.preferences := {
-
-  case object DoubleIndentMethodDeclaration extends BooleanPreferenceDescriptor {
-    val key = "doubleIndentMethodDeclaration"
-    val description = "Double indent a method's parameters"
-    val defaultValue = false
-  }
-
-  ScalariformKeys.preferences.value
-    .setPreference(DoubleIndentClassDeclaration, true)
-    .setPreference(DoubleIndentMethodDeclaration, true)
-    .setPreference(AlignSingleLineCaseStatements, true)
-    .setPreference(SpacesAroundMultiImports, true)
-}
+ScalariformKeys.preferences := ScalariformKeys.preferences.value
+  .setPreference(DoubleIndentClassDeclaration, true)
+  .setPreference(DoubleIndentMethodDeclaration, true)
+  .setPreference(AlignSingleLineCaseStatements, true)
+  .setPreference(SpacesAroundMultiImports, true)
 
 coverageMinimum := 75
 coverageFailOnMinimum := true
@@ -35,8 +27,8 @@ coverageExcludedPackages := "<empty>;Reverse.*;views.*;mongo.*;global.*;router.*
 incOptions := incOptions.value.withNameHashing(true)
 
 libraryDependencies ++= {
-  val playVersion = "2.5.6"
-  val akkaVersion = "2.4.9"
+  val playVersion = "2.5.9"
+  val akkaVersion = "2.4.11"
   Seq(
     "com.typesafe.play" %% "play-ws" % playVersion,
     //  "com.typesafe.play" %% "play-json" % playVersion,
@@ -55,30 +47,35 @@ scalacOptions ++= Seq(
   "-language:reflectiveCalls"
 )
 
+credentials += Credentials(Path.userHome / ".ivy2" / ".vb_sonatype")
+sonatypeProfileName := organization.value
+publishMavenStyle := true
+publishTo := {
+  val nexus = "https://oss.sonatype.org/"
+  if (isSnapshot.value)
+    Some("snapshots" at nexus + "content/repositories/snapshots")
+  else
+    Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+}
+
+homepage := Some(url("https://github.com/viajobien/busy"))
+licenses := Seq("Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
 pomExtra := {
-  <url>https://github.com/viajobien/busy</url>
-    <licenses>
-      <license>
-        <name>Apache 2</name>
-        <url>http://www.apache.org/licenses/LICENSE-2.0</url>
-        <distribution>repo</distribution>
-      </license>
-    </licenses>
-    <scm>
-      <url>git@github.com:viajobien/busy.git</url>
-      <connection>scm:git@github.com:viajobien/busy.git</connection>
-    </scm>
-    <developers>
-      <developer>
-        <id>LeonhardtDavid</id>
-        <name>David Leonhardt</name>
-        <url>https://github.com/LeonhardtDavid</url>
-      </developer>
-      <developer>
-        <id>lucasmatw</id>
-        <name>Lucas</name>
-        <url>https://github.com/lucasmatw</url>
-      </developer>
-    </developers>
+  <scm>
+    <url>git@github.com:viajobien/busy.git</url>
+    <connection>scm:git@github.com:viajobien/busy.git</connection>
+  </scm>
+  <developers>
+    <developer>
+      <id>LeonhardtDavid</id>
+      <name>David Leonhardt</name>
+      <url>https://github.com/LeonhardtDavid</url>
+    </developer>
+    <developer>
+      <id>lucasmatw</id>
+      <name>Lucas</name>
+      <url>https://github.com/lucasmatw</url>
+    </developer>
+  </developers>
 }
 

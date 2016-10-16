@@ -52,7 +52,7 @@ class BasicRouter[T <: Route](repository: Repository[T]) extends EndpointRouter 
     }
 
   /**
-   * Searches and endpoint using request's path.
+   * Searches an endpoint using request's path.
    */
   override def route(implicit req: Request[AnyContent]): Option[Endpoint] = {
     Logger.trace("routing " + req + " with routeTree " + routeTree)

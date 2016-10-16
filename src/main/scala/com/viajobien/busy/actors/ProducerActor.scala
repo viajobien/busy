@@ -14,6 +14,8 @@ import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.{ Failure, Success }
 
 /**
+ * Probably, in the future, this would be a simple class, not an actor, or some akka-stream wrapper.
+ *
  * @author david on 13/10/14.
  */
 class ProducerActor @Inject() (
@@ -71,6 +73,9 @@ class ProducerActor @Inject() (
 }
 
 object ProducerActor {
+  /*
+   * Final vals to bind by name (dependency injection)
+   */
   final val contextName = "ProducerContext"
   final val name = "ProducerActor"
 }
