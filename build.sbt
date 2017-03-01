@@ -27,8 +27,8 @@ coverageExcludedPackages := "<empty>;Reverse.*;views.*;mongo.*;global.*;router.*
 incOptions := incOptions.value.withNameHashing(true)
 
 libraryDependencies ++= {
-  val playVersion = "2.5.9"
-  val akkaVersion = "2.4.11"
+  val playVersion = "2.5.12"
+  val akkaVersion = "2.4.14"
   Seq(
     "com.typesafe.play" %% "play-ws" % playVersion,
     //  "com.typesafe.play" %% "play-json" % playVersion,
