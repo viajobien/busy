@@ -24,8 +24,7 @@ sealed trait Evaluator {
 
   protected def eval(
     cond: Condition,
-    f: String => Boolean
-  )(implicit request: Request[AnyContent]): Boolean = cond.value match {
+    f: String => Boolean)(implicit request: Request[AnyContent]): Boolean = cond.value match {
     case Some(v) => f(v)
     case _       => false
   }

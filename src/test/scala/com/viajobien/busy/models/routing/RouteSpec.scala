@@ -1,9 +1,9 @@
 package com.viajobien.busy.models.routing
 
 import com.viajobien.busy.dsl.condition.{ Always, Condition }
-import org.mockito.Matchers._
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{ Matchers, WordSpecLike }
 import play.api.mvc.{ AnyContent, Request }
 import play.api.test.FakeRequest
@@ -40,8 +40,7 @@ class RouteSpec extends WordSpecLike with Matchers with MockitoSugar {
   case class RouteImpl(
       override val path: String = "path",
       endpoint: String = "endpoint",
-      condition: Condition = Always()
-  ) extends Route(path, endpoint, condition) {
+      condition: Condition = Always()) extends Route(path, endpoint, condition) {
 
     override type T = String
     override val id: String = "id"

@@ -1,20 +1,23 @@
 import com.typesafe.sbt.SbtScalariform.ScalariformKeys
-
 import scalariform.formatter.preferences._
 
 name := "busy"
 organization := "com.viajobien"
-version := "0.1.0"
-scalaVersion := "2.11.8"
+version := "0.2.0"
+scalaVersion := "2.12.3"
+
+crossScalaVersions := Seq("2.11.11")
 
 lazy val root = project in file(".")
 
 lazy val compileScalastyle = taskKey[Unit]("compileScalastyle")
-compileScalastyle := org.scalastyle.sbt.ScalastylePlugin.scalastyle.in(Compile).toTask("").value
-compileScalastyle <<= compileScalastyle triggeredBy (compile in Compile)
+scalastyleFailOnError := true
+compileScalastyle := scalastyle.in(Compile).toTask("").value
+compileScalastyle in Compile := (compileScalastyle in Compile).dependsOn(SbtScalariform.autoImport.scalariformFormat in Compile).value
+compile in Compile := (compile in Compile).dependsOn(compileScalastyle in Compile).value
 
 ScalariformKeys.preferences := ScalariformKeys.preferences.value
-  .setPreference(DoubleIndentClassDeclaration, true)
+  .setPreference(DoubleIndentConstructorArguments, true)
   .setPreference(DoubleIndentMethodDeclaration, true)
   .setPreference(AlignSingleLineCaseStatements, true)
   .setPreference(SpacesAroundMultiImports, true)
@@ -22,24 +25,23 @@ ScalariformKeys.preferences := ScalariformKeys.preferences.value
 coverageMinimum := 75
 coverageFailOnMinimum := true
 coverageHighlighting := false
-coverageExcludedPackages := "<empty>;Reverse.*;views.*;mongo.*;global.*;router.*"
+coverageExcludedPackages := "<empty>exceptions.*;"
 
 incOptions := incOptions.value.withNameHashing(true)
 
 libraryDependencies ++= {
-  val playVersion = "2.5.9"
-  val akkaVersion = "2.4.11"
+  val playVersion = "2.6.3"
   Seq(
+    "com.typesafe.play" %% "play-json" % "2.6.3",
     "com.typesafe.play" %% "play-ws" % playVersion,
-    //  "com.typesafe.play" %% "play-json" % playVersion,
     "com.typesafe.play" %% "play" % playVersion,
-    "com.typesafe.akka" %% "akka-actor" % akkaVersion,
-    "com.google.inject" % "guice" % "4.0",
-    "com.typesafe.akka" %% "akka-testkit" % akkaVersion % Test,
-    "org.scalatestplus" %% "play" % "1.4.0" % Test,
-    "org.mockito" % "mockito-core" % "1.10.19" % Test
+    "com.google.inject" % "guice" % "4.1.0" exclude("com.google.guava", "guava"),
+    "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.1" % Test,
+    "org.mockito" % "mockito-core" % "2.8.47" % Test
   )
 }
+
+parallelExecution in Test := false
 
 scalacOptions ++= Seq(
   "-feature",

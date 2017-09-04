@@ -30,8 +30,7 @@ class RouteBuilderSpec extends WordSpecLike with Matchers {
   case class RouteImpl(
       override val path: String = "path",
       endpoint: String = "endpoint",
-      condition: Condition = Always()
-  ) extends Route(path, endpoint, condition) {
+      condition: Condition = Always()) extends Route(path, endpoint, condition) {
 
     override type T = String
     override val id: String = "id"

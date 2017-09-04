@@ -79,9 +79,7 @@ class RouteNode(val mapTree: Map[String, RouteTree] = TreeMap.empty[String, Rout
           PATH_WILDCARD,
           this.mapTree.getOrElse(
             p,
-            this.mapTree.getOrElse(PATH_PART_WILDCARD, new RouteEmpty())
-          )
-        )
+            this.mapTree.getOrElse(PATH_PART_WILDCARD, new RouteEmpty())))
         tree.find(ps)
     }
 
@@ -118,10 +116,9 @@ class RouteNode(val mapTree: Map[String, RouteTree] = TreeMap.empty[String, Rout
  * @param routes the [[routing.Route]]s that are in this node
  */
 class RouteEndpointNode(
-  routes: List[Route],
-  mapTree: Map[String, RouteTree] = TreeMap.empty[String, RouteTree]
-)
-    extends RouteNode(mapTree) {
+    routes: List[Route],
+    mapTree: Map[String, RouteTree] = TreeMap.empty[String, RouteTree])
+  extends RouteNode(mapTree) {
 
   require(routes.nonEmpty)
 

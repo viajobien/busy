@@ -1,5 +1,7 @@
 package com.viajobien.busy.dsl.condition
 
+import java.text.ParseException
+
 import scala.util.Try
 import scala.util.parsing.combinator.syntactical._
 
@@ -30,25 +32,26 @@ object ConditionDSL {
 
     lexical.reserved += (ALWAYS, HEADER, QUERY, JSON, BODY, NAME, PARAMETER, IS, CONTAINS, STARTS, ENDS, WITH)
 
-    def transform(dsl: String): ParseResult[Condition] = this.trans(new lexical.Scanner(dsl.trim))
+    def transform(dsl: String): ParseResult[Condition] = this.trans(new lexical.Scanner(dsl.trim.toLowerCase))
 
     // format: OFF
     private def trans: Parser[Condition] =
       condition ~ (checkField ?) ~ (checkValue ?) ^^ {
-        case (always: Always)     ~ _                      ~ _                   => always
-        case (header: Header)     ~ Some((`NAME`, n))      ~ Some(Is(v))         => header name n is v
-        case (query: Query)       ~ Some((`PARAMETER`, p)) ~ Some(Is(v))         => query parameter p is v
-        case (jsonBody: JsonBody) ~ Some((`PARAMETER`, p)) ~ Some(Is(v))         => jsonBody parameter p is v
-        case (jsonBody: JsonBody) ~ Some((`PARAMETER`, p)) ~ Some(StartsWith(v)) => jsonBody parameter p startsWith v
-        case (jsonBody: JsonBody) ~ Some((`PARAMETER`, p)) ~ Some(EndsWith(v))   => jsonBody parameter p endsWith v
+        case (always:   Always)   ~ _                    ~ _                   => always
+        case (header:   Header)   ~ Some((NAME, n))      ~ Some(Is(v))         => header name n is v
+        case (query:    Query)    ~ Some((PARAMETER, p)) ~ Some(Is(v))         => query parameter p is v
+        case (jsonBody: JsonBody) ~ Some((PARAMETER, p)) ~ Some(Is(v))         => jsonBody parameter p is v
+        case (jsonBody: JsonBody) ~ Some((PARAMETER, p)) ~ Some(StartsWith(v)) => jsonBody parameter p startsWith v
+        case (jsonBody: JsonBody) ~ Some((PARAMETER, p)) ~ Some(EndsWith(v))   => jsonBody parameter p endsWith v
+        case _                                                                 => throw new ParseException("Invalid", 0)
       }
 
     private def condition: Parser[Condition] =
       (ALWAYS | HEADER | QUERY | (JSON <~ BODY)) ^^ {
-        case `ALWAYS` => Always()
-        case `HEADER` => Header()
-        case `QUERY`  => Query()
-        case `JSON`   => JsonBody()
+        case ALWAYS => Always()
+        case HEADER => Header()
+        case QUERY  => Query()
+        case JSON   => JsonBody()
       }
 
     private def checkField: Parser[(String, String)] =
@@ -56,11 +59,11 @@ object ConditionDSL {
 
     private def checkValue: Parser[Evaluator] =
       (IS | CONTAINS | (STARTS <~ WITH) | (ENDS <~ WITH)) ~ stringLit ^^ {
-        case `IS`       ~ v => Is(v)
-        case `CONTAINS` ~ v => Contains(v)
-        case `STARTS`   ~ v => StartsWith(v)
-        case `ENDS`     ~ v => EndsWith(v)
-        case _              => True()
+        case IS       ~ v => Is(v)
+        case CONTAINS ~ v => Contains(v)
+        case STARTS   ~ v => StartsWith(v)
+        case ENDS     ~ v => EndsWith(v)
+        case _            => True()
       }
     // format: ON
 

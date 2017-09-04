@@ -8,8 +8,7 @@ import scala.collection.immutable.TreeMap
 class RouteBuilder(routeTables: List[Route]) extends PathUtil {
 
   def createRouteTree: RouteTree = routeTables.foldLeft[RouteTree](
-    new RouteEmpty()
-  ) { (rn, rt) =>
+    new RouteEmpty()) { (rn, rt) =>
       rn ++ this.buildTree(rt, this.splitPath(rt.path))
     }
 
